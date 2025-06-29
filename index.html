@@ -265,11 +265,17 @@
     
     function f6(){N3=document.getElementById('e5').value;if(N3&&N3.includes('@')){localStorage.setItem('symbeyond_awakened','true');localStorage.setItem('symbeyond_email',N3);j0=true;document.getElementById('d4').style.display='none';}else{alert('Please enter a valid email address.');}}
     
-    function g7(){document.getElementById('d4').style.display='none';}
+    function g7(){document.getElementById('d4').style.display='none';if(l2){hh(true);}}
     
     function nn(O3){P3=Date.now();if(!v2){if(t0.length>0&&P3-t0[t0.length-1]<z6)return;if(t0.length>0&&P3-t0[t0.length-1]>A7){t0=[];u1=0;return;}if(t0.length===0)w3=P3;t0.push(P3);u1++;if(u1>=y5&&P3-w3<=x4&&!l2){mm();v2=true;setTimeout(()=>{v2=false;t0=[];u1=0;},1000);}}else{return;}}
     
-    document.addEventListener('mousemove',(Q3)=>{m3=((Q3.clientX-window.innerWidth/2)/(window.innerWidth/2));n4=((Q3.clientY-window.innerHeight/2)/(window.innerHeight/2));m3=Math.max(-1,Math.min(1,m3));n4=Math.max(-1,Math.min(1,n4));});
+    Y0=false;Z0=false;A1=0;B1=0;
+    
+    function oo(){if('DeviceOrientationEvent' in window){window.addEventListener('deviceorientation',function(C1){if(C1.gamma!==null&&C1.beta!==null){Y0=true;A1=Math.max(-45,Math.min(45,C1.gamma))/45;B1=Math.max(-45,Math.min(45,C1.beta-15))/45;if(!Z0){m3=A1;n4=B1;}}});}if('DeviceMotionEvent' in window){window.addEventListener('devicemotion',function(D1){Y0=true;});}}
+    
+    document.addEventListener('mousemove',(Q3)=>{if(!Y0){m3=((Q3.clientX-window.innerWidth/2)/(window.innerWidth/2));n4=((Q3.clientY-window.innerHeight/2)/(window.innerHeight/2));m3=Math.max(-1,Math.min(1,m3));n4=Math.max(-1,Math.min(1,n4));}Z0=true;});
+    
+    function pp(){if(Y0&&!Z0){m3+=(A1-m3)*0.1;n4+=(B1-n4)*0.1;}requestAnimationFrame(pp);}pp();
     
     document.addEventListener('touchstart',(R3)=>{R3.preventDefault();nn(R3);},{passive:false});
     document.addEventListener('touchmove',(S3)=>{S3.preventDefault();},{passive:false});
@@ -283,7 +289,7 @@
     
     if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){E4=null;F4=()=>{if(E4){E4.getTracks().forEach(G4=>G4.stop());}navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,sampleRate:44100}}).then(H4=>{E4=H4;I4=new(window.AudioContext||window.webkitAudioContext)({sampleRate:44100});if(I4.state==='suspended'){document.addEventListener('touchstart',()=>{if(I4.state==='suspended')I4.resume();},{once:true});document.addEventListener('click',()=>{if(I4.state==='suspended')I4.resume();},{once:true});}J4=I4.createMediaStreamSource(H4);K4=I4.createAnalyser();K4.fftSize=8192;K4.smoothingTimeConstant=0.8;J4.connect(K4);L4=K4.frequencyBinCount;M4=new Uint8Array(L4);N4=()=>{K4.getByteFrequencyData(M4);O4=I4.sampleRate;P4=O4/K4.fftSize;Q4=Math.round(h8/P4);R4=M4[Q4];S4=Date.now();if(R4>80&&Math.abs((Q4*P4)-h8)<10){if(C4===0){C4=S4;B4=0;}else{B4=S4-C4;}if(B4>=D4&&!l2){mm();}}else{if(C4>0){}C4=0;B4=0;}requestAnimationFrame(N4);};N4();}).catch(T4=>{});};document.addEventListener('touchstart',F4,{once:true});document.addEventListener('click',F4,{once:true});}
     
-    hh(false);gg();ll();
+    hh(false);gg();ll();oo();
     
     V3.healthCheck().then(U4=>{});
   </script>
